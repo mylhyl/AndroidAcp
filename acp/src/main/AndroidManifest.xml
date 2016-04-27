@@ -1,5 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mylhyl.acp">
 
-    <application />
+    <application>
+        <activity
+            android:name=".AcpActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Transparent" />
+    </application>
+
 </manifest>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidAcp</string>
+    <string name="hello_blank_fragment">点我试试imei权限</string>
 </resources>
