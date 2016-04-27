@@ -6,9 +6,9 @@
  * 处理权限拒绝，或勾选不再询问，导致不能正常使用功能的提示框，支持跳转设置权限界面开启权限，所有提示框文字可自定义。  
 
 # 效果图
-<img src="acp.gif" />
-<img src="img0.png" />
-<img src="img1.gif" />
+<img src="preview/acp.gif" />
+<img src="preview/img0.png" />
+<img src="preview/img1.gif" />
 
 #使用Gradle构建时添加一下依赖即可:
 ```javascript
