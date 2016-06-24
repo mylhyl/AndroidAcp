@@ -36,4 +36,9 @@ compile 'com.mylhyl:acp:1.0.0'
                     }
                 });
 ```
-QQ交流群:435173211
+### 友情提示
+在`android studio`环境 请求`Manifest.permission.CALL_PHONE`权限时，Intent不能使用带参的构造函数(Intent.ACTION_CALL)，否则会编译通不过的。
+
+### [下载APK体验](/preview/sample-debug.apk)
+
+## QQ交流群:435173211

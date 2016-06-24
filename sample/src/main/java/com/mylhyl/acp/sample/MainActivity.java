@@ -1,6 +1,8 @@
 package com.mylhyl.acp.sample;
 
 import android.Manifest;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -115,6 +117,33 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void onClickCallPhone(View view) {
+        Acp.getInstance(this).request(new AcpOptions.Builder().setPermissions(Manifest.permission.CALL_PHONE).build(),
+                new AcpListener() {
+                    @Override
+                    public void onGranted() {
+                        //注意：不用用带参的构造方法 否则 android studio 环境出错，提示要你检查授权
+
+/*
+                        Intent intentCall = new Intent(Intent.ACTION_CALL, Uri.parse("tel:13800138000"));
+                        intentCall.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intentCall);
+*/
+
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("tel:13800138000"));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onDenied(List<String> permissions) {
+                        makeText(permissions.toString() + "权限拒绝");
+                    }
+                });
+
+    }
 
 //
 //    @Override

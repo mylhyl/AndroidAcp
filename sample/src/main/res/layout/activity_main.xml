@@ -52,4 +52,12 @@
         android:text="Fragment申请权限"
         android:textAllCaps="false" />
 
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClickCallPhone"
+        android:text="打电话" />
 </RelativeLayout>
