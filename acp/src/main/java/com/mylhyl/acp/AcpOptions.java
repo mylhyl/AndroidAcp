@@ -57,31 +57,67 @@ public final class AcpOptions {
         private String mRationalBtn = DEF_RATIONAL_BTN_TEXT;
         private String[] mPermissions;
 
+        /**
+         * 申请权限框提示语
+         *
+         * @param rationalMessage
+         * @return
+         */
         public Builder setRationalMessage(String rationalMessage) {
             mRationalMessage = rationalMessage;
             return this;
         }
 
-        public Builder setDeniedMessage(String deniedMessage) {
-            mDeniedMessage = deniedMessage;
-            return this;
-        }
-
-        public Builder setDeniedCloseBtn(String deniedCloseBtnText) {
-            this.mDeniedCloseBtn = deniedCloseBtnText;
-            return this;
-        }
-
-        public Builder setDeniedSettingBtn(String deniedSettingText) {
-            this.mDeniedSettingBtn = deniedSettingText;
-            return this;
-        }
-
+        /**
+         * 申请权限框按钮
+         *
+         * @param rationalBtnText
+         * @return
+         */
         public Builder setRationalBtn(String rationalBtnText) {
             this.mRationalBtn = rationalBtnText;
             return this;
         }
 
+        /**
+         * 拒绝框提示语
+         *
+         * @param deniedMessage
+         * @return
+         */
+        public Builder setDeniedMessage(String deniedMessage) {
+            mDeniedMessage = deniedMessage;
+            return this;
+        }
+
+        /**
+         * 拒绝框关闭按钮
+         *
+         * @param deniedCloseBtnText
+         * @return
+         */
+        public Builder setDeniedCloseBtn(String deniedCloseBtnText) {
+            this.mDeniedCloseBtn = deniedCloseBtnText;
+            return this;
+        }
+
+        /**
+         * 拒绝框跳转设置权限按钮
+         *
+         * @param deniedSettingText
+         * @return
+         */
+        public Builder setDeniedSettingBtn(String deniedSettingText) {
+            this.mDeniedSettingBtn = deniedSettingText;
+            return this;
+        }
+
+        /**
+         * 需要申请的权限
+         *
+         * @param mPermissions {@linkplain android.Manifest.permission android.Manifest.permission}
+         * @return
+         */
         public Builder setPermissions(String... mPermissions) {
             this.mPermissions = mPermissions;
             return this;

@@ -9,6 +9,13 @@ import android.support.v4.content.ContextCompat;
  * Created by hupei on 2016/4/26.
  */
 class AcpService {
+    /**
+     * 检查权限授权状态
+     *
+     * @param context
+     * @param permission
+     * @return
+     */
     int checkSelfPermission(Context context, String permission) {
         return ContextCompat.checkSelfPermission(context, permission);
     }

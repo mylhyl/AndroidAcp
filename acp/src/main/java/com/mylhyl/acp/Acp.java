@@ -23,9 +23,15 @@ public class Acp {
         mAcpManager = new AcpManager(context.getApplicationContext());
     }
 
+    /**
+     * 开始请求权限
+     *
+     * @param options
+     * @param acpListener
+     */
     public void request(AcpOptions options, AcpListener acpListener) {
-        if (options == null) new RuntimeException("AcpOptions is null...");
-        if (acpListener == null) new RuntimeException("AcpListener is null...");
+        if (options == null) new NullPointerException("AcpOptions is null...");
+        if (acpListener == null) new NullPointerException("AcpListener is null...");
         mAcpManager.request(options, acpListener);
     }
 
