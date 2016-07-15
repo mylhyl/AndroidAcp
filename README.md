@@ -10,7 +10,7 @@
 
 #使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:acp:1.0.0'
+compile 'com.mylhyl:acp:1.0.1'
 ```
 
 # 使用说明
