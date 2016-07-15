@@ -10,18 +10,21 @@
 
 #使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:acp:1.0.1'
+compile 'com.mylhyl:acp:1.0.2'
 ```
 
 # 使用说明
 ```java
         Acp.getInstance(this).request(new AcpOptions.Builder()
-                        .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE)
-//                .setDeniedMessage()
-//                .setDeniedCloseBtn()
-//                .setDeniedSettingBtn()
-//                .setRationalMessage()
-//                .setRationalBtn()
+                        .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                , Manifest.permission.READ_PHONE_STATE
+                                , Manifest.permission.SEND_SMS)
+                /*以下为自定义提示语、按钮文字
+                .setDeniedMessage()
+                .setDeniedCloseBtn()
+                .setDeniedSettingBtn()
+                .setRationalMessage()
+                .setRationalBtn()*/
                         .build(),
                 new AcpListener() {
                     @Override
@@ -42,3 +45,7 @@ compile 'com.mylhyl:acp:1.0.1'
 ### [下载APK体验](/preview/sample-debug.apk)
 
 ## QQ交流群:435173211
+
+#### 版本日志
+> 1.0.1 修改 minSdkVersion 14
+> 1.0.2 修复申请的权限不在`AndroidManifest.xml`配置文件时，中仍然显示`RationalMessage`对话框的问题

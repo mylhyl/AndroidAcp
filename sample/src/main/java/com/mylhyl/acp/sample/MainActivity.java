@@ -33,12 +33,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickAll(View v) {
         Acp.getInstance(this).request(new AcpOptions.Builder()
-                        .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE)
-//                .setDeniedMessage()
-//                .setDeniedCloseBtn()
-//                .setDeniedSettingBtn()
-//                .setRationalMessage()
-//                .setRationalBtn()
+                        .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                , Manifest.permission.READ_PHONE_STATE
+                                , Manifest.permission.SEND_SMS)
+                /*以下为自定义提示语、按钮文字
+                .setDeniedMessage()
+                .setDeniedCloseBtn()
+                .setDeniedSettingBtn()
+                .setRationalMessage()
+                .setRationalBtn()*/
                         .build(),
                 new AcpListener() {
                     @Override

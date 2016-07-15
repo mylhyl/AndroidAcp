@@ -1,17 +1,20 @@
 package com.mylhyl.acp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by hupei on 2016/4/26.
@@ -25,12 +28,31 @@ class AcpManager {
     private AcpOptions mOptions;
     private AcpListener mCallback;
     private final List<String> mDeniedPermissions = new LinkedList<>();
+    private final Set<String> mManifestPermissions = new HashSet<>(1);
 
     AcpManager(Context context) {
         mContext = context;
         mService = new AcpService();
+        getManifestPermissions();
     }
 
+    private synchronized void getManifestPermissions() {
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = mContext.getPackageManager().getPackageInfo(
+                    mContext.getPackageName(), PackageManager.GET_PERMISSIONS);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageInfo != null) {
+            String[] permissions = packageInfo.requestedPermissions;
+            if (permissions != null) {
+                for (String perm : permissions) {
+                    mManifestPermissions.add(perm);
+                }
+            }
+        }
+    }
 
     synchronized void request(AcpOptions options, AcpListener acpListener) {
         mCallback = acpListener;
@@ -42,11 +64,16 @@ class AcpManager {
         mDeniedPermissions.clear();
         String[] permissions = mOptions.getPermissions();
         for (String permission : permissions) {
-            int permissionCheck = mService.checkSelfPermission(mContext, permission);
-            if (permissionCheck == PackageManager.PERMISSION_DENIED) {
-                mDeniedPermissions.add(permission);
+            //检查申请的权限是否在 AndroidManifest.xml 中
+            if (mManifestPermissions.contains(permission)) {
+                int checkSelfPermission = mService.checkSelfPermission(mContext, permission);
+                //如果是拒绝状态则装入拒绝集合中
+                if (checkSelfPermission == PackageManager.PERMISSION_DENIED) {
+                    mDeniedPermissions.add(permission);
+                }
             }
         }
+        //如果没有一个拒绝是响应同意回调
         if (mDeniedPermissions.isEmpty()) {
             mCallback.onGranted();
             onDestroy();
@@ -125,10 +152,16 @@ class AcpManager {
                 }).show();
     }
 
+    /**
+     * 摧毁本库的 AcpActivity
+     */
     private void onDestroy() {
         if (mActivity != null) mActivity.finish();
     }
 
+    /**
+     * 跳转到设置界面
+     */
     private void startSetting() {
         try {
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
