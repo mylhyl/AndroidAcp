@@ -48,4 +48,5 @@ compile 'com.mylhyl:acp:1.0.2'
 
 #### 版本日志
 > 1.0.1 修改 minSdkVersion 14
+
 > 1.0.2 修复申请的权限不在`AndroidManifest.xml`配置文件时，中仍然显示`RationalMessage`对话框的问题
