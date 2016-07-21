@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
 
 import java.util.HashSet;
@@ -62,6 +63,11 @@ class AcpManager {
 
     private synchronized void checkSelfPermission() {
         mDeniedPermissions.clear();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            mCallback.onGranted();
+            onDestroy();
+            return;
+        }
         String[] permissions = mOptions.getPermissions();
         for (String permission : permissions) {
             //检查申请的权限是否在 AndroidManifest.xml 中
