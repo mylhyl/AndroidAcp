@@ -10,7 +10,7 @@
 
 #使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:acp:1.1.2'
+compile 'com.mylhyl:acp:1.1.5'
 ```
 
 # 使用说明
@@ -41,14 +41,17 @@ compile 'com.mylhyl:acp:1.1.2'
 ```
 ### 友情提示
 在`android studio`环境 请求`Manifest.permission.CALL_PHONE`权限时，Intent不能使用带参的构造函数(Intent.ACTION_CALL)，否则会编译通不过的。
+由于手机厂商深度定制系统的原因，很多预料不到滴，奇怪滴问题一大堆，如`checkSelfPermission`永远都是`PERMISSION_DENIED`或`PERMISSION_GRANTED`，都是坑爹的无解，小弟不才帮不到大家，望大神指点一二三！
 
 ### [下载APK体验](/preview/sample-debug.apk)
 
 ## QQ交流群:435173211
 
 #### 版本日志
-> 1.0.1 修改 minSdkVersion 14
+> 1.1.5 兼容小米跳转权限设置
+
+> 1.1.2 增加`M`版本检测
 
 > 1.0.2 修复申请的权限不在`AndroidManifest.xml`配置文件时，中仍然显示`RationalMessage`对话框的问题
 
-> 1.1.2 增加`M`版本检测
+> 1.0.1 修改 minSdkVersion 14

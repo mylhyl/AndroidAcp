@@ -1,9 +1,11 @@
 package com.mylhyl.acp.sample;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.view.View;
@@ -12,7 +14,6 @@ import android.widget.Toast;
 import com.mylhyl.acp.Acp;
 import com.mylhyl.acp.AcpListener;
 import com.mylhyl.acp.AcpOptions;
-import com.mylhyl.takephoto.TakePhotoUtil;
 
 import java.io.File;
 import java.util.List;
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     private void writeSD() {
-        File acpDir = TakePhotoUtil.getCacheDir("acp", this);
+        File acpDir = getCacheDir("acp", this);
         if (acpDir != null)
             makeText("写SD成功：" + acpDir.getAbsolutePath());
     }
@@ -187,6 +188,30 @@ public class MainActivity extends AppCompatActivity {
         TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (tm != null)
             makeText("读imei成功：" + tm.getDeviceId());
+    }
+
+    public static File getCacheDir(String dirName, Context context) {
+        File result;
+        if (existsSdcard()) {
+            File cacheDir = context.getExternalCacheDir();
+            if (cacheDir == null) {
+                result = new File(Environment.getExternalStorageDirectory(),
+                        "Android/data/" + context.getPackageName() + "/cache/" + dirName);
+            } else {
+                result = new File(cacheDir, dirName);
+            }
+        } else {
+            result = new File(context.getCacheDir(), dirName);
+        }
+        if (result.exists() || result.mkdirs()) {
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+    public static Boolean existsSdcard() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
     private void makeText(String text) {

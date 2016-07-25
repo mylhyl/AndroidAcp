@@ -8,11 +8,14 @@ import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
+import android.util.Log;
 
 /**
  * Created by hupei on 2016/4/26.
  */
 class AcpService {
+    private static final String TAG = "AcpService";
+
     /**
      * 检查权限授权状态
      *
@@ -27,6 +30,7 @@ class AcpService {
             int targetSdkVersion = info.applicationInfo.targetSdkVersion;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (targetSdkVersion >= Build.VERSION_CODES.M) {
+                    Log.i(TAG, "targetSdkVersion >= Build.VERSION_CODES.M");
                     return ContextCompat.checkSelfPermission(context, permission);
                 } else {
                     return PermissionChecker.checkSelfPermission(context, permission);
@@ -43,6 +47,8 @@ class AcpService {
     }
 
     boolean shouldShowRequestPermissionRationale(Activity activity, String permission) {
-        return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
+        boolean rationale = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
+        Log.i(TAG, "rationale = " + rationale);
+        return rationale;
     }
 }

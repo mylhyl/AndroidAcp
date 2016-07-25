@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -21,6 +22,7 @@ import java.util.Set;
  * Created by hupei on 2016/4/26.
  */
 class AcpManager {
+    private static final String TAG = "AcpManager";
     private static final int REQUEST_CODE_PERMISSION = 0x38;
     private static final int REQUEST_CODE_SETTING = 0x39;
     private Context mContext;
@@ -64,6 +66,7 @@ class AcpManager {
     private synchronized void checkSelfPermission() {
         mDeniedPermissions.clear();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            Log.i(TAG, "Build.VERSION.SDK_INT < Build.VERSION_CODES.M");
             mCallback.onGranted();
             onDestroy();
             return;
@@ -73,6 +76,7 @@ class AcpManager {
             //检查申请的权限是否在 AndroidManifest.xml 中
             if (mManifestPermissions.contains(permission)) {
                 int checkSelfPermission = mService.checkSelfPermission(mContext, permission);
+                Log.i(TAG, "checkSelfPermission = " + checkSelfPermission);
                 //如果是拒绝状态则装入拒绝集合中
                 if (checkSelfPermission == PackageManager.PERMISSION_DENIED) {
                     mDeniedPermissions.add(permission);
@@ -81,6 +85,7 @@ class AcpManager {
         }
         //如果没有一个拒绝是响应同意回调
         if (mDeniedPermissions.isEmpty()) {
+            Log.i(TAG, "mDeniedPermissions.isEmpty()");
             mCallback.onGranted();
             onDestroy();
             return;
@@ -100,6 +105,7 @@ class AcpManager {
         for (String permission : mDeniedPermissions) {
             shouldShowRational = shouldShowRational || mService.shouldShowRequestPermissionRationale(mActivity, permission);
         }
+        Log.i(TAG, "shouldShowRational = " + shouldShowRational);
         String[] permissions = mDeniedPermissions.toArray(new String[mDeniedPermissions.size()]);
         if (shouldShowRational) showRationalDialog(permissions);
         else requestPermissions(permissions);
@@ -169,14 +175,25 @@ class AcpManager {
      * 跳转到设置界面
      */
     private void startSetting() {
-        try {
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    .setData(Uri.parse("package:" + mActivity.getPackageName()));
-            mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
-            Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
-            mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
+        if (MiuiOs.isMIUI()) {
+            Intent intent = MiuiOs.getSettingIntent(mActivity);
+            if (MiuiOs.isIntentAvailable(mActivity, intent)) {
+                mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
+            }
+        } else {
+            try {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        .setData(Uri.parse("package:" + mActivity.getPackageName()));
+                mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                try {
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                    mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
         }
     }
 
