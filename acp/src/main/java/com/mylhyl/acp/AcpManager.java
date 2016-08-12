@@ -57,12 +57,21 @@ class AcpManager {
         }
     }
 
+    /**
+     * 开始请求
+     *
+     * @param options
+     * @param acpListener
+     */
     synchronized void request(AcpOptions options, AcpListener acpListener) {
         mCallback = acpListener;
         mOptions = options;
         checkSelfPermission();
     }
 
+    /**
+     * 检查权限
+     */
     private synchronized void checkSelfPermission() {
         mDeniedPermissions.clear();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -83,7 +92,7 @@ class AcpManager {
                 }
             }
         }
-        //如果没有一个拒绝是响应同意回调
+        //检查如果没有一个拒绝响应 onGranted 回调
         if (mDeniedPermissions.isEmpty()) {
             Log.i(TAG, "mDeniedPermissions.isEmpty()");
             mCallback.onGranted();
@@ -93,15 +102,24 @@ class AcpManager {
         startAcpActivity();
     }
 
+    /**
+     * 启动处理权限过程的 Activity
+     */
     private synchronized void startAcpActivity() {
         Intent intent = new Intent(mContext, AcpActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
 
+    /**
+     * 检查权限是否存在拒绝不再提示
+     *
+     * @param activity
+     */
     synchronized void requestPermissions(Activity activity) {
         mActivity = activity;
         boolean shouldShowRational = false;
+        //如果有则提示申请理由提示框，否则直接向系统请求权限
         for (String permission : mDeniedPermissions) {
             shouldShowRational = shouldShowRational || mService.shouldShowRequestPermissionRationale(mActivity, permission);
         }
@@ -111,6 +129,11 @@ class AcpManager {
         else requestPermissions(permissions);
     }
 
+    /**
+     * 申请理由对话框
+     *
+     * @param permissions
+     */
     private synchronized void showRationalDialog(final String[] permissions) {
         new AlertDialog.Builder(mActivity)
                 .setMessage(mOptions.getRationalMessage())
@@ -122,10 +145,22 @@ class AcpManager {
                 }).show();
     }
 
+    /**
+     * 向系统请求权限
+     *
+     * @param permissions
+     */
     private synchronized void requestPermissions(String[] permissions) {
         mService.requestPermissions(mActivity, permissions, REQUEST_CODE_PERMISSION);
     }
 
+    /**
+     * 响应向系统请求权限结果
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     synchronized void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_PERMISSION:
@@ -137,6 +172,7 @@ class AcpManager {
                         grantedPermissions.add(permission);
                     else deniedPermissions.add(permission);
                 }
+                //全部允许才回调 onGranted 否则只要有一个拒绝都回调 onDenied
                 if (!grantedPermissions.isEmpty() && deniedPermissions.isEmpty()) {
                     mCallback.onGranted();
                     onDestroy();
@@ -145,6 +181,11 @@ class AcpManager {
         }
     }
 
+    /**
+     * 拒绝权限提示框
+     *
+     * @param permissions
+     */
     private synchronized void showDeniedDialog(final List<String> permissions) {
         new AlertDialog.Builder(mActivity)
                 .setMessage(mOptions.getDeniedMessage())
@@ -197,6 +238,13 @@ class AcpManager {
         }
     }
 
+    /**
+     * 响应设置权限返回结果
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     synchronized void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (mCallback == null || mOptions == null
                 || requestCode != REQUEST_CODE_SETTING) {

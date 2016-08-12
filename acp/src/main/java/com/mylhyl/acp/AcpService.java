@@ -42,10 +42,24 @@ class AcpService {
         return ContextCompat.checkSelfPermission(context, permission);
     }
 
+    /**
+     * 向系统请求权限
+     *
+     * @param activity
+     * @param permissions
+     * @param requestCode
+     */
     void requestPermissions(Activity activity, String[] permissions, int requestCode) {
         ActivityCompat.requestPermissions(activity, permissions, requestCode);
     }
 
+    /**
+     * 检查权限是否存在拒绝不再提示
+     *
+     * @param activity
+     * @param permission
+     * @return
+     */
     boolean shouldShowRequestPermissionRationale(Activity activity, String permission) {
         boolean rationale = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
         Log.i(TAG, "rationale = " + rationale);

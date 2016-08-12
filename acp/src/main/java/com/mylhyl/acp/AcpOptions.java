@@ -58,7 +58,7 @@ public final class AcpOptions {
         private String[] mPermissions;
 
         /**
-         * 申请权限框提示语
+         * 申请权限理由框提示语
          *
          * @param rationalMessage
          * @return
@@ -69,7 +69,7 @@ public final class AcpOptions {
         }
 
         /**
-         * 申请权限框按钮
+         * 申请权限理由框按钮
          *
          * @param rationalBtnText
          * @return

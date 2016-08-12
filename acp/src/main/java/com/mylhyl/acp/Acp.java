@@ -24,7 +24,7 @@ public class Acp {
     }
 
     /**
-     * 开始请求权限
+     * 开始请求
      *
      * @param options
      * @param acpListener
@@ -35,14 +35,33 @@ public class Acp {
         mAcpManager.request(options, acpListener);
     }
 
+    /**
+     * 响应向系统请求权限结果
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         mAcpManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    /**
+     * 响应设置权限返回结果
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     void onActivityResult(int requestCode, int resultCode, Intent data) {
         mAcpManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * 检查权限是否存在拒绝不再提示
+     *
+     * @param activity
+     */
     void requestPermissions(Activity activity) {
         mAcpManager.requestPermissions(activity);
     }
