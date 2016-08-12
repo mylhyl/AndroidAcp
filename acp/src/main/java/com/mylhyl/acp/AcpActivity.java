@@ -13,13 +13,13 @@ public class AcpActivity extends AppCompatActivity {
         //不接受触摸屏事件
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         if (savedInstanceState == null)
-            Acp.getInstance(this).requestPermissions(this);
+            Acp.getInstance(this).checkRequestPermissionRationale(this);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Acp.getInstance(this).requestPermissions(this);
+        Acp.getInstance(this).checkRequestPermissionRationale(this);
     }
 
     @Override

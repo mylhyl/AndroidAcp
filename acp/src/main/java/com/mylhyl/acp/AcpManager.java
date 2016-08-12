@@ -116,7 +116,7 @@ class AcpManager {
      *
      * @param activity
      */
-    synchronized void requestPermissions(Activity activity) {
+    synchronized void checkRequestPermissionRationale(Activity activity) {
         mActivity = activity;
         boolean shouldShowRational = false;
         //如果有则提示申请理由提示框，否则直接向系统请求权限

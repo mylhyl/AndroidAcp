@@ -62,7 +62,7 @@ public class Acp {
      *
      * @param activity
      */
-    void requestPermissions(Activity activity) {
-        mAcpManager.requestPermissions(activity);
+    void checkRequestPermissionRationale(Activity activity) {
+        mAcpManager.checkRequestPermissionRationale(activity);
     }
 }
