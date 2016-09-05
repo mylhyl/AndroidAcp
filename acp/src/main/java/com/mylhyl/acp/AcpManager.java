@@ -76,7 +76,8 @@ class AcpManager {
         mDeniedPermissions.clear();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             Log.i(TAG, "Build.VERSION.SDK_INT < Build.VERSION_CODES.M");
-            mCallback.onGranted();
+            if (mCallback != null)
+                mCallback.onGranted();
             onDestroy();
             return;
         }
@@ -95,7 +96,8 @@ class AcpManager {
         //检查如果没有一个拒绝响应 onGranted 回调
         if (mDeniedPermissions.isEmpty()) {
             Log.i(TAG, "mDeniedPermissions.isEmpty()");
-            mCallback.onGranted();
+            if (mCallback != null)
+                mCallback.onGranted();
             onDestroy();
             return;
         }
@@ -174,7 +176,8 @@ class AcpManager {
                 }
                 //全部允许才回调 onGranted 否则只要有一个拒绝都回调 onDenied
                 if (!grantedPermissions.isEmpty() && deniedPermissions.isEmpty()) {
-                    mCallback.onGranted();
+                    if (mCallback != null)
+                        mCallback.onGranted();
                     onDestroy();
                 } else if (!deniedPermissions.isEmpty()) showDeniedDialog(deniedPermissions);
                 break;
@@ -193,7 +196,8 @@ class AcpManager {
                 .setNegativeButton(mOptions.getDeniedCloseBtn(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mCallback.onDenied(permissions);
+                        if (mCallback != null)
+                            mCallback.onDenied(permissions);
                         onDestroy();
                     }
                 })
@@ -209,7 +213,11 @@ class AcpManager {
      * 摧毁本库的 AcpActivity
      */
     private void onDestroy() {
-        if (mActivity != null) mActivity.finish();
+        if (mActivity != null) {
+            mActivity.finish();
+            mActivity = null;
+        }
+        mCallback = null;
     }
 
     /**

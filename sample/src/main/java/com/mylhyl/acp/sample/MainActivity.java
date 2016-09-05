@@ -26,6 +26,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Acp.getInstance(this).request(new AcpOptions.Builder()
+                        .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                , Manifest.permission.READ_PHONE_STATE
+                                , Manifest.permission.SEND_SMS)
+                /*以下为自定义提示语、按钮文字
+                .setDeniedMessage()
+                .setDeniedCloseBtn()
+                .setDeniedSettingBtn()
+                .setRationalMessage()
+                .setRationalBtn()*/
+                        .build(),
+                new AcpListener() {
+                    @Override
+                    public void onGranted() {
+                        writeSD();
+                        getIMEI();
+                    }
+
+                    @Override
+                    public void onDenied(List<String> permissions) {
+                        makeText(permissions.toString() + "权限拒绝");
+                    }
+                });
     }
 
     public void onClickFragment(View v) {
