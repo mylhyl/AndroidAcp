@@ -10,7 +10,7 @@
 
 #使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:acp:1.1.6'
+compile 'com.mylhyl:acp:1.1.7'
 ```
 
 # 使用说明
@@ -48,6 +48,8 @@ compile 'com.mylhyl:acp:1.1.6'
 ## QQ交流群:435173211
 
 #### 版本日志
+> 1.1.7 修复内存泄露
+
 > 1.1.6 Acp单例增加双重锁
 
 > 1.1.5 兼容小米跳转权限设置
