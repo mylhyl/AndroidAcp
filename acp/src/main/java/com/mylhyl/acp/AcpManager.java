@@ -118,14 +118,14 @@ class AcpManager {
      */
     synchronized void checkRequestPermissionRationale(Activity activity) {
         mActivity = activity;
-        boolean shouldShowRational = false;
-        //如果有则提示申请理由提示框，否则直接向系统请求权限
+        boolean rationale = false;
+        //如果有拒绝则提示申请理由提示框，否则直接向系统请求权限
         for (String permission : mDeniedPermissions) {
-            shouldShowRational = shouldShowRational || mService.shouldShowRequestPermissionRationale(mActivity, permission);
+            rationale = rationale || mService.shouldShowRequestPermissionRationale(mActivity, permission);
         }
-        Log.i(TAG, "shouldShowRational = " + shouldShowRational);
+        Log.i(TAG, "rationale = " + rationale);
         String[] permissions = mDeniedPermissions.toArray(new String[mDeniedPermissions.size()]);
-        if (shouldShowRational) showRationalDialog(permissions);
+        if (rationale) showRationalDialog(permissions);
         else requestPermissions(permissions);
     }
 
@@ -220,22 +220,23 @@ class AcpManager {
             Intent intent = MiuiOs.getSettingIntent(mActivity);
             if (MiuiOs.isIntentAvailable(mActivity, intent)) {
                 mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
-            }
-        } else {
-            try {
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        .setData(Uri.parse("package:" + mActivity.getPackageName()));
-                mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
-            } catch (ActivityNotFoundException e) {
-                e.printStackTrace();
-                try {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
-                    mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+                return;
             }
         }
+        try {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    .setData(Uri.parse("package:" + mActivity.getPackageName()));
+            mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            try {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+
     }
 
     /**

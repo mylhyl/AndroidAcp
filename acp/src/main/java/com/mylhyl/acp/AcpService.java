@@ -61,8 +61,8 @@ class AcpService {
      * @return
      */
     boolean shouldShowRequestPermissionRationale(Activity activity, String permission) {
-        boolean rationale = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
-        Log.i(TAG, "rationale = " + rationale);
-        return rationale;
+        boolean shouldShowRational = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
+        Log.i(TAG, "shouldShowRational = " + shouldShowRational);
+        return shouldShowRational;
     }
 }
