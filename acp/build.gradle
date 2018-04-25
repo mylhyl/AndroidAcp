@@ -1,15 +1,15 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "25.0.0"
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName version
+        versionName '1.2.0'
     }
     buildTypes {
         release {
@@ -19,85 +19,19 @@ android {
     }
     lintOptions {
         abortOnError false
+        checkReleaseBuilds false
     }
 }
 
-def siteUrl = 'https://github.com/mylhyl/AndroidAcp'
-def gitUrl = 'https://github.com/mylhyl/AndroidAcp.git'
-
-group = "com.mylhyl"
-version = "1.2.0"
-
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                artifactId 'acp'
-                name 'Simplify Android 6.0 complex permissions operation'
-                url siteUrl
-
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'mylhyl'
-                        name 'mylhylAndroid'
-                        email 'hupei132@qq.com'
-                    }
-                }
-
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    options.encoding = "UTF-8"
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-bintray {
-    user = properties.getProperty("BINTRAY_USER")
-    key = properties.getProperty("BINTRAY_KEY")
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = "acp"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true //是否发布
-    }
-}
 dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
+}
+
+publish {
+    userOrg = 'mylhyl'
+    groupId = 'com.mylhyl'
+    artifactId = 'acp'
+    version = '1.2.0'
+    description = 'Simplify Android 6.0 complex permissions operation'
+    website = "https://github.com/mylhyl/AndroidAcp"
 }
