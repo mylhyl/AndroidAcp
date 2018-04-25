@@ -137,14 +137,17 @@ class AcpManager {
      * @param permissions
      */
     private synchronized void showRationalDialog(final String[] permissions) {
-        new AlertDialog.Builder(mActivity)
+        AlertDialog alertDialog = new AlertDialog.Builder(mActivity)
                 .setMessage(mOptions.getRationalMessage())
                 .setPositiveButton(mOptions.getRationalBtnText(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         requestPermissions(permissions);
                     }
-                }).show();
+                }).create();
+        alertDialog.setCancelable(mOptions.isDialogCancelable());
+        alertDialog.setCanceledOnTouchOutside(mOptions.isDialogCanceledOnTouchOutside());
+        alertDialog.show();
     }
 
     /**
@@ -190,9 +193,8 @@ class AcpManager {
      * @param permissions
      */
     private synchronized void showDeniedDialog(final List<String> permissions) {
-        new AlertDialog.Builder(mActivity)
+        AlertDialog alertDialog = new AlertDialog.Builder(mActivity)
                 .setMessage(mOptions.getDeniedMessage())
-                .setCancelable(false)
                 .setNegativeButton(mOptions.getDeniedCloseBtn(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -206,7 +208,10 @@ class AcpManager {
                     public void onClick(DialogInterface dialog, int which) {
                         startSetting();
                     }
-                }).show();
+                }).create();
+        alertDialog.setCancelable(mOptions.isDialogCancelable());
+        alertDialog.setCanceledOnTouchOutside(mOptions.isDialogCanceledOnTouchOutside());
+        alertDialog.show();
     }
 
     /**

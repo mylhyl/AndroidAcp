@@ -26,7 +26,7 @@ def siteUrl = 'https://github.com/mylhyl/AndroidAcp'
 def gitUrl = 'https://github.com/mylhyl/AndroidAcp.git'
 
 group = "com.mylhyl"
-version = "1.1.7"
+version = "1.2.0"
 
 install {
     repositories.mavenInstaller {

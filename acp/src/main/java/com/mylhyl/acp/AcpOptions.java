@@ -10,6 +10,8 @@ public final class AcpOptions {
     private String mDeniedSettingBtn;
     private String mRationalBtn;
     private String[] mPermissions;
+    private boolean mDialogCancelable;
+    private boolean mDialogCanceledOnTouchOutside;
 
     private AcpOptions(Builder builder) {
         mRationalMessage = builder.mRationalMessage;
@@ -17,7 +19,9 @@ public final class AcpOptions {
         mDeniedCloseBtn = builder.mDeniedCloseBtn;
         mDeniedSettingBtn = builder.mDeniedSettingBtn;
         mRationalBtn = builder.mRationalBtn;
-        this.mPermissions = builder.mPermissions;
+        mPermissions = builder.mPermissions;
+        mDialogCancelable = builder.dialogCancelable;
+        mDialogCanceledOnTouchOutside = builder.dialogCanceledOnTouchOutside;
     }
 
     public String getRationalMessage() {
@@ -44,6 +48,14 @@ public final class AcpOptions {
         return mPermissions;
     }
 
+    public boolean isDialogCancelable() {
+        return mDialogCancelable;
+    }
+
+    public boolean isDialogCanceledOnTouchOutside() {
+        return mDialogCanceledOnTouchOutside;
+    }
+
     public static class Builder {
         private static final String DEF_RATIONAL_MESSAGE = "此功能需要您授权，否则将不能正常使用";
         private static final String DEF_DENIED_MESSAGE = "您拒绝权限申请，此功能将不能正常使用，您可以去设置页面重新授权";
@@ -56,6 +68,8 @@ public final class AcpOptions {
         private String mDeniedSettingBtn = DEF_DENIED_SETTINGS_BTN_TEXT;
         private String mRationalBtn = DEF_RATIONAL_BTN_TEXT;
         private String[] mPermissions;
+        private boolean dialogCancelable = false;
+        private boolean dialogCanceledOnTouchOutside = false;
 
         /**
          * 申请权限理由框提示语
@@ -120,6 +134,16 @@ public final class AcpOptions {
          */
         public Builder setPermissions(String... mPermissions) {
             this.mPermissions = mPermissions;
+            return this;
+        }
+
+        public Builder setDialogCancelable(boolean dialogCancelable) {
+            this.dialogCancelable = dialogCancelable;
+            return this;
+        }
+
+        public Builder setDialogCanceledOnTouchOutside(boolean dialogCanceledOnTouchOutside) {
+            this.dialogCanceledOnTouchOutside = dialogCanceledOnTouchOutside;
             return this;
         }
 
