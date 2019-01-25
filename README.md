@@ -45,8 +45,6 @@ compile 'com.mylhyl:acp:1.2.0'
 
 ### [下载APK体验](/preview/sample-debug.apk)
 
-## QQ交流群:435173211
-
 #### 版本日志
 > 1.1.7 修复内存泄露
 
