@@ -5,23 +5,14 @@ import android.content.Context;
 /**
  * Created by hupei on 2016/4/26.
  */
-public class Acp {
-
-    private static Acp mInstance;
+public final class Acp {
+    private volatile boolean mInitialized;
     private AcpManager mAcpManager;
 
     public static Acp getInstance(Context context) {
-        if (mInstance == null)
-            synchronized (Acp.class) {
-                if (mInstance == null) {
-                    mInstance = new Acp(context);
-                }
-            }
-        return mInstance;
-    }
-
-    private Acp(Context context) {
-        mAcpManager = new AcpManager(context.getApplicationContext());
+        Acp instance = HolderClass.instance;
+        instance.init(context);
+        return instance;
     }
 
     /**
@@ -31,6 +22,7 @@ public class Acp {
      * @param acpListener
      */
     public void request(AcpOptions options, AcpListener acpListener) {
+        //Preconditions
         if (options == null) new NullPointerException("AcpOptions is null...");
         if (acpListener == null) new NullPointerException("AcpListener is null...");
         mAcpManager.request(options, acpListener);
@@ -38,5 +30,17 @@ public class Acp {
 
     AcpManager getAcpManager() {
         return mAcpManager;
+    }
+
+    private void init(Context context) {
+        if (mInitialized) {
+            return;
+        }
+        mAcpManager = new AcpManager(context.getApplicationContext());
+        mInitialized = true;
+    }
+
+    private static class HolderClass {
+        private static final Acp instance = new Acp();
     }
 }
