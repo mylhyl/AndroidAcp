@@ -7,7 +7,7 @@ import java.util.List;
  */
 public interface AcpListener {
     /**
-     *同意
+     * 同意
      */
     void onGranted();
 
@@ -15,4 +15,5 @@ public interface AcpListener {
      * 拒绝
      */
     void onDenied(List<String> permissions);
+
 }

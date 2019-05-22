@@ -3,6 +3,7 @@ package com.mylhyl.acp.os;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
@@ -47,7 +48,7 @@ public final class OsHelper {
             }
             intent = settingPage.createIntent();
         } catch (Exception e) {
-            Log.e("acp OsHelper", OS_NATIVE + " " + e.getMessage());
+            Log.e("acp", "OsHelper startSetting " + OS_NATIVE + " " + e.getMessage());
         }
         if (intent == null) {
             intent = getIntentNative(activity);
@@ -55,7 +56,7 @@ public final class OsHelper {
         try {
             activity.startActivityForResult(intent, requestCode);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("acp", "OsHelper startActivityForResult " + OS_NATIVE + " " + e.getMessage());
             intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
             activity.startActivityForResult(intent, requestCode);
         }
@@ -78,5 +79,12 @@ public final class OsHelper {
         List<ResolveInfo> resolveInfo = packageManager.queryIntentActivities(intent
                 , PackageManager.MATCH_DEFAULT_ONLY);
         return resolveInfo.size() > 0;
+    }
+
+    static boolean isActivityExported(Context context, Intent intent) throws PackageManager.NameNotFoundException {
+        PackageManager packageManager = context.getPackageManager();
+        ActivityInfo activityInfo = packageManager.getActivityInfo(intent.getComponent()
+                , PackageManager.MATCH_DEFAULT_ONLY);
+        return activityInfo != null && !activityInfo.exported;
     }
 }

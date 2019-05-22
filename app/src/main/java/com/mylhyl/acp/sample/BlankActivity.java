@@ -1,12 +1,13 @@
 package com.mylhyl.acp.sample;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,16 +24,16 @@ import java.util.List;
 
 public class BlankActivity extends AppCompatActivity {
 
+    public static void gotoAct(Activity act) {
+        act.startActivity(new Intent(act, BlankActivity.class));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null)
             getSupportFragmentManager().beginTransaction()
                     .add(android.R.id.content, BlankFragment.newInstance()).commitAllowingStateLoss();
-    }
-
-    public static void gotoAct(Activity act) {
-        act.startActivity(new Intent(act, BlankActivity.class));
     }
 
     public static class BlankFragment extends Fragment implements View.OnClickListener {
@@ -51,7 +52,8 @@ public class BlankActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             TextView textView = new TextView(getActivity());
-            textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
+                    .LayoutParams.MATCH_PARENT));
             textView.setGravity(Gravity.CENTER);
             textView.setText(R.string.hello_blank_fragment);
             textView.append("\n\nFragment中申请权限");
@@ -71,11 +73,14 @@ public class BlankActivity extends AppCompatActivity {
 
                         @Override
                         public void onDenied(List<String> permissions) {
-                            Toast.makeText(BlankFragment.this.getActivity(), permissions.toString() + "权限拒绝", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(BlankFragment.this.getActivity(), permissions.toString() + "权限拒绝", Toast
+                                    .LENGTH_SHORT).show();
                         }
+
                     });
         }
 
+        @SuppressLint("MissingPermission")
         private void getIMEI() {
             FragmentActivity activity = this.getActivity();
             TelephonyManager tm = (TelephonyManager) this.getActivity().getSystemService(Activity.TELEPHONY_SERVICE);

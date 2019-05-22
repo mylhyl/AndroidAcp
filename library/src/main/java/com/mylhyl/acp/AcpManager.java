@@ -29,7 +29,7 @@ class AcpManager {
     private Context appContext;
     private Activity internalActivity;
     private AcpOptions mOptions;
-    private AcpListener mCallback;
+    private AcpListener mListener;
 
     AcpManager(Context context) {
         appContext = context;
@@ -43,7 +43,7 @@ class AcpManager {
      * @param acpListener
      */
     synchronized void request(AcpOptions options, AcpListener acpListener) {
-        mCallback = acpListener;
+        mListener = acpListener;
         mOptions = options;
         checkSelfPermission();
     }
@@ -86,8 +86,9 @@ class AcpManager {
                 }
                 //全部允许才回调 onGranted 否则只要有一个拒绝都回调 onDenied
                 if (!grantedPermissions.isEmpty() && deniedPermissions.isEmpty()) {
-                    if (mCallback != null)
-                        mCallback.onGranted();
+                    if (mListener != null) {
+                        mListener.onGranted();
+                    }
                     onDestroy();
                 } else if (!deniedPermissions.isEmpty()) showDeniedDialog(deniedPermissions);
                 break;
@@ -102,8 +103,7 @@ class AcpManager {
      * @param data
      */
     synchronized void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mCallback == null || mOptions == null
-                || requestCode != REQUEST_CODE_SETTING) {
+        if (mListener == null || mOptions == null || requestCode != REQUEST_CODE_SETTING) {
             onDestroy();
             return;
         }
@@ -113,8 +113,8 @@ class AcpManager {
     private synchronized void getManifestPermissions() {
         PackageInfo packageInfo = null;
         try {
-            packageInfo = appContext.getPackageManager().getPackageInfo(
-                    appContext.getPackageName(), PackageManager.GET_PERMISSIONS);
+            packageInfo = appContext.getPackageManager().getPackageInfo(appContext.getPackageName()
+                    , PackageManager.GET_PERMISSIONS);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -135,8 +135,8 @@ class AcpManager {
         mDeniedPermissions.clear();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             Log.i(TAG, "Build.VERSION.SDK_INT < Build.VERSION_CODES.M");
-            if (mCallback != null)
-                mCallback.onGranted();
+            if (mListener != null)
+                mListener.onGranted();
             onDestroy();
             return;
         }
@@ -150,13 +150,15 @@ class AcpManager {
                 if (checkSelfPermission == PackageManager.PERMISSION_DENIED) {
                     mDeniedPermissions.add(permission);
                 }
+            } else {
+                throw new RuntimeException("AndroidManifest.xml no uses permission " + permission);
             }
         }
         //检查如果没有一个拒绝响应 onGranted 回调
         if (mDeniedPermissions.isEmpty()) {
             Log.i(TAG, "mDeniedPermissions.isEmpty()");
-            if (mCallback != null)
-                mCallback.onGranted();
+            if (mListener != null)
+                mListener.onGranted();
             onDestroy();
             return;
         }
@@ -211,8 +213,8 @@ class AcpManager {
                 .setNegativeButton(mOptions.getDeniedCloseBtn(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (mCallback != null)
-                            mCallback.onDenied(permissions);
+                        if (mListener != null)
+                            mListener.onDenied(permissions);
                         onDestroy();
                     }
                 })
@@ -235,13 +237,13 @@ class AcpManager {
             internalActivity.finish();
             internalActivity = null;
         }
-        mCallback = null;
+        mListener = null;
     }
 
     /**
      * 跳转到设置界面
      */
     private void startSetting() {
-        OsHelper.startSetting(internalActivity,REQUEST_CODE_SETTING);
+        OsHelper.startSetting(internalActivity, REQUEST_CODE_SETTING);
     }
 }
