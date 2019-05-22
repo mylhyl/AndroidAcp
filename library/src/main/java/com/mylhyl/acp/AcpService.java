@@ -13,7 +13,10 @@ import android.util.Log;
 /**
  * Created by hupei on 2016/4/26.
  */
-class AcpService {
+final class AcpService {
+    private AcpService() {
+        //no instance
+    }
     private static final String TAG = "AcpService";
 
     /**
@@ -23,7 +26,7 @@ class AcpService {
      * @param permission
      * @return
      */
-    int checkSelfPermission(Context context, String permission) {
+    static int checkSelfPermission(Context context, String permission) {
         try {
             final PackageInfo info = context.getPackageManager().getPackageInfo(
                     context.getPackageName(), 0);
@@ -49,7 +52,7 @@ class AcpService {
      * @param permissions
      * @param requestCode
      */
-    void requestPermissions(Activity activity, String[] permissions, int requestCode) {
+    static void requestPermissions(Activity activity, String[] permissions, int requestCode) {
         ActivityCompat.requestPermissions(activity, permissions, requestCode);
     }
 
@@ -60,7 +63,7 @@ class AcpService {
      * @param permission
      * @return
      */
-    boolean shouldShowRequestPermissionRationale(Activity activity, String permission) {
+    static boolean shouldShowRequestPermissionRationale(Activity activity, String permission) {
         boolean shouldShowRational = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
         Log.i(TAG, "shouldShowRational = " + shouldShowRational);
         return shouldShowRational;

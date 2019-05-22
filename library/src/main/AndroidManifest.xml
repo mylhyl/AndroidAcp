@@ -5,7 +5,6 @@
     <application>
         <activity
             android:name=".AcpActivity"
-            android:launchMode="singleTask"
             android:theme="@style/Theme.Transparent" />
     </application>
 

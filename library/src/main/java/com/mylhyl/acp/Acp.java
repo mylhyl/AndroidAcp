@@ -22,7 +22,6 @@ public final class Acp {
      * @param acpListener
      */
     public void request(AcpOptions options, AcpListener acpListener) {
-        //Preconditions
         if (options == null) new NullPointerException("AcpOptions is null...");
         if (acpListener == null) new NullPointerException("AcpListener is null...");
         mAcpManager.request(options, acpListener);
