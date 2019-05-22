@@ -9,8 +9,6 @@ import android.content.pm.PackageManager;
  */
 public class Vivo implements SettingPage {
 
-    private static final String PKG = "com.iqoo.secure";
-
     private Context context;
 
     public Vivo(Context context) {
@@ -19,19 +17,30 @@ public class Vivo implements SettingPage {
 
     @Override
     public Intent createIntent() throws PackageManager.NameNotFoundException {
+
         Intent intent = new Intent();
+        intent.putExtra("packageName", context.getPackageName());
+        intent.putExtra(EXTRA_PKG_NAME, context.getPackageName());
+        intent.putExtra(EXTRA_PKG, context.getPackageName());
+
         intent.setClassName("com.vivo.permissionmanager"
                 , "com.vivo.permissionmanager.activity.SoftPermissionDetailActivity");
-        if (!OsHelper.isIntentAvailable(context, intent)) {
-            intent.setClassName(PKG, "com.iqoo.secure.safeguard.SoftPermissionDetailActivity");
-        } else if (!OsHelper.isIntentAvailable(context, intent)) {
-            intent.setClassName(PKG, "com.iqoo.secure.MainActivity");
+        if (OsHelper.isIntentAvailable(context, intent) && OsHelper.isActivityExported(context, intent)) {
+            return intent;
         }
-        intent.putExtra(EXTRA_PKG_NAME, context.getPackageName());
-        if (OsHelper.isActivityExported(context, intent)) {
-            intent = null;
+
+        intent.setClassName("com.iqoo.secure"
+                , "com.iqoo.secure.safeguard.SoftPermissionDetailActivity");
+        if (OsHelper.isIntentAvailable(context, intent) && OsHelper.isActivityExported(context, intent)) {
+            return intent;
         }
-        return intent;
+
+        intent.setClassName("com.iqoo.secure", "com.iqoo.secure.MainActivity");
+        if (OsHelper.isIntentAvailable(context, intent) && OsHelper.isActivityExported(context, intent)) {
+            return intent;
+        }
+
+        return null;
     }
 
 }

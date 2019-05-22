@@ -85,6 +85,6 @@ public final class OsHelper {
         PackageManager packageManager = context.getPackageManager();
         ActivityInfo activityInfo = packageManager.getActivityInfo(intent.getComponent()
                 , PackageManager.MATCH_DEFAULT_ONLY);
-        return activityInfo != null && !activityInfo.exported;
+        return activityInfo != null && activityInfo.exported;
     }
 }

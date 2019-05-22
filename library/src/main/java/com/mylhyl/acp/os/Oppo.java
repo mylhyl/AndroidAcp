@@ -1,17 +1,13 @@
 package com.mylhyl.acp.os;
 
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 
 /**
  * Created by hupei on 2019/5/21 20:36.
  */
 public class Oppo implements SettingPage {
-
-    private final String PKG = "com.coloros.safecenter";
-    private final String MAIN_CLS = "com.coloros.safecenter.permission.singlepage.PermissionSinglePageActivity";
 
     private Context context;
 
@@ -20,11 +16,41 @@ public class Oppo implements SettingPage {
     }
 
     @Override
-    public Intent createIntent() throws ActivityNotFoundException {
+    public Intent createIntent() throws PackageManager.NameNotFoundException {
+
         Intent intent = new Intent();
-        intent.setComponent(new ComponentName(PKG, MAIN_CLS));
+        intent.putExtra("packageName", context.getPackageName());
+        intent.putExtra(EXTRA_PKG_NAME, context.getPackageName());
         intent.putExtra(EXTRA_PKG, context.getPackageName());
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return intent;
+
+        intent.setClassName("com.color.safecenter", "com.color.safecenter.permission.PermissionManagerActivity");
+        if (OsHelper.isIntentAvailable(context, intent) && OsHelper.isActivityExported(context, intent)) {
+            return intent;
+        }
+
+        intent.setClassName("com.oppo.safe", "com.oppo.safe.permission.PermissionAppListActivity");
+        if (OsHelper.isIntentAvailable(context, intent) && OsHelper.isActivityExported(context, intent)) {
+            return intent;
+        }
+
+        intent.setClassName("com.coloros.safecenter"
+                , "com.coloros.safecenter.permission.singlepage.PermissionSinglePageActivity");
+        if (OsHelper.isIntentAvailable(context, intent) && OsHelper.isActivityExported(context, intent)) {
+            return intent;
+        }
+
+
+        intent.setClassName("com.coloros.securitypermission"
+                , "com.coloros.securitypermission.permission.PermissionGroupsActivity");
+        if (OsHelper.isIntentAvailable(context, intent) && OsHelper.isActivityExported(context, intent)) {
+            return intent;
+        }
+
+        intent.setClassName("com.coloros.securitypermission"
+                , "com.coloros.securitypermission.permission.PermissionAppAllPermissionActivity");
+        if (OsHelper.isIntentAvailable(context, intent) && OsHelper.isActivityExported(context, intent)) {
+            return intent;
+        }
+        return null;
     }
 }

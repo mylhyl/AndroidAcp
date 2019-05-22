@@ -18,9 +18,11 @@ public class Native implements SettingPage {
 
     @Override
     public Intent createIntent() {
+
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts(EXTRA_PKG, context.getPackageName(), null);
         intent.setData(uri);
+
         return intent;
     }
 }
