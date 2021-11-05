@@ -8,7 +8,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 1
-        versionName '1.2.0'
+        versionName '1.2.1'
     }
     buildTypes {
         release {
@@ -23,14 +23,14 @@ android {
 }
 
 dependencies {
-    compileOnly 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 }
 
 publish {
     userOrg = 'mylhyl'
     groupId = 'com.mylhyl'
     artifactId = 'acp'
-    publishVersion = '1.2.0'
+    publishVersion = '1.2.1'
     desc = 'Simplify Android 6.0 complex permissions operation'
     website = "https://github.com/mylhyl/AndroidAcp"
 }

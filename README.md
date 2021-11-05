@@ -8,9 +8,22 @@
 # 效果图
 <img src="preview/gif.gif" width="240px"/>
 
-#使用Gradle构建时添加一下依赖即可:
+#使用Gradle构建时添加一下依赖即可
+Step 1. Add the JitPack repository to your build file
+Add it in your root build.gradle at the end of repositories:
 ```javascript
-compile 'com.mylhyl:acp:1.2.0'
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+Step 2. Add the dependency
+```
+	dependencies {
+	        implementation 'com.github.mylhyl:AndroidAcp:1.2.1'
+	}
 ```
 
 # 使用说明
