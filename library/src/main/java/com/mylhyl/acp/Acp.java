@@ -27,6 +27,10 @@ public final class Acp {
         mAcpManager.request(options, acpListener);
     }
 
+    public void onDestroy() {
+        mAcpManager.onDestroy();
+    }
+
     AcpManager getAcpManager() {
         return mAcpManager;
     }

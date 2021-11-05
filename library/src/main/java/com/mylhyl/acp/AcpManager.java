@@ -89,7 +89,6 @@ class AcpManager {
                     if (mListener != null) {
                         mListener.onGranted();
                     }
-                    onDestroy();
                 } else if (!deniedPermissions.isEmpty()) showDeniedDialog(deniedPermissions);
                 break;
         }
@@ -104,7 +103,6 @@ class AcpManager {
      */
     synchronized void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (mListener == null || mOptions == null || requestCode != REQUEST_CODE_SETTING) {
-            onDestroy();
             return;
         }
         checkSelfPermission();
@@ -135,9 +133,9 @@ class AcpManager {
         mDeniedPermissions.clear();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             Log.i(TAG, "Build.VERSION.SDK_INT < Build.VERSION_CODES.M");
-            if (mListener != null)
+            if (mListener != null) {
                 mListener.onGranted();
-            onDestroy();
+            }
             return;
         }
         String[] permissions = mOptions.getPermissions();
@@ -157,9 +155,9 @@ class AcpManager {
         //检查如果没有一个拒绝响应 onGranted 回调
         if (mDeniedPermissions.isEmpty()) {
             Log.i(TAG, "mDeniedPermissions.isEmpty()");
-            if (mListener != null)
+            if (mListener != null) {
                 mListener.onGranted();
-            onDestroy();
+            }
             return;
         }
         startAcpActivity();
@@ -213,9 +211,9 @@ class AcpManager {
                 .setNegativeButton(mOptions.getDeniedCloseBtn(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (mListener != null)
+                        if (mListener != null) {
                             mListener.onDenied(permissions);
-                        onDestroy();
+                        }
                     }
                 })
                 .setPositiveButton(mOptions.getDeniedSettingBtn(), new DialogInterface.OnClickListener() {
@@ -232,7 +230,7 @@ class AcpManager {
     /**
      * 摧毁本库的 AcpActivity
      */
-    private void onDestroy() {
+    void onDestroy() {
         if (internalActivity != null) {
             internalActivity.finish();
             internalActivity = null;

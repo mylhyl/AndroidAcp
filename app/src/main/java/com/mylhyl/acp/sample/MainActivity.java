@@ -161,11 +161,15 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intentCall);
 */
 
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_CALL);
-                        intent.setData(Uri.parse("tel:13800138000"));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                        try {
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:13800138000"));
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
